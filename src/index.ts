@@ -40,4 +40,23 @@ const getBlockchain = (): Block[] => blockchain;
 const getLatestBlock = (): Block => blockchain[blockchain.length - 1];
 
 const getNewTimeStamp = (): number => Math.round(new Date().getTime() / 1000);
+
+const createNewBlock = (data: string): Block => {
+  const prevBlock: Block = getLatestBlock();
+  const newIdx: number = prevBlock.index + 1;
+  const newTimestamp: number = getNewTimeStamp();
+  const newHash: string = Block.calculateBlockHash(
+    newIdx,
+    prevBlock.hash,
+    newTimestamp,
+    data
+  );
+  return new Block(newIdx, newHash, prevBlock.hash, data, newTimestamp);
+};
+
+const block1: Block = createNewBlock("piecemakerz");
+const block2: Block = createNewBlock("Bye noob");
+
+console.log(block1, block2);
+
 export {};
