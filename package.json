@@ -1,0 +1,23 @@
+{
+  "name": "typescript-blockchain",
+  "version": "1.0.0",
+  "description": "Learning Typescript by implementing very simple blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piecemakerz/typescript-blockchain.git"
+  },
+  "keywords": [
+    "typescript",
+    "blockchain"
+  ],
+  "author": "piecemakerz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piecemakerz/typescript-blockchain/issues"
+  },
+  "homepage": "https://github.com/piecemakerz/typescript-blockchain#readme"
+}
