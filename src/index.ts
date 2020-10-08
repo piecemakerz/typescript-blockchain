@@ -1,6 +1,25 @@
 import * as CryptoJS from "crypto-js";
 
 class Block {
+  static calculateBlockHash = (
+    index: number,
+    prevHash: string,
+    timestamp: number,
+    data: string
+  ): string => {
+    return CryptoJS.SHA256(index + prevHash + timestamp + data).toString();
+  };
+
+  static validateStructure = (block: Block): boolean => {
+    return (
+      typeof block.index === "number" &&
+      typeof block.hash === "string" &&
+      typeof block.prevHash === "string" &&
+      typeof block.timestamp === "number" &&
+      block.data === "string"
+    );
+  };
+
   public index: number;
   public hash: string;
   public prevHash: string;
@@ -14,15 +33,6 @@ class Block {
     this.data = data;
     this.timestamp = timestamp;
   }
-
-  static calculateBlockHash = (
-    index: number,
-    prevHash: string,
-    timestamp: number,
-    data: string
-  ): string => {
-    return CryptoJS.SHA256(index + prevHash + timestamp + data).toString();
-  };
 }
 
 const genesisBlock: Block = new Block(
@@ -51,12 +61,47 @@ const createNewBlock = (data: string): Block => {
     newTimestamp,
     data
   );
-  return new Block(newIdx, newHash, prevBlock.hash, data, newTimestamp);
+  const newBlock: Block = new Block(
+    newIdx,
+    newHash,
+    prevBlock.hash,
+    data,
+    newTimestamp
+  );
+  addBlock(newBlock);
+  return newBlock;
 };
 
-const block1: Block = createNewBlock("piecemakerz");
-const block2: Block = createNewBlock("Bye noob");
+const isBlockValid = (candidate: Block, prev: Block): boolean => {
+  if (!Block.validateStructure(candidate)) {
+    return false;
+  } else if (prev.index + 1 !== candidate.index) {
+    return false;
+  } else if (prev.hash !== candidate.prevHash) {
+    return false;
+  } else if (getHashForBlock(candidate) !== candidate.hash) {
+    return false;
+  } else {
+    return true;
+  }
+};
 
-console.log(block1, block2);
+const addBlock = (candidate: Block): void => {
+  if (isBlockValid(candidate, getLatestBlock())) {
+    blockchain.push(candidate);
+  }
+};
+const getHashForBlock = (block: Block): string => {
+  return Block.calculateBlockHash(
+    block.index,
+    block.prevHash,
+    block.timestamp,
+    block.data
+  );
+};
+
+createNewBlock("second block");
+createNewBlock("third block");
+createNewBlock("fourth block");
 
 export {};
